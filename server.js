@@ -8,8 +8,14 @@ app.listen(process.env.port || 4000, () => {
   console.log("now lisenting on port 4000");
 });
 
+const newsData = [
+  { title: "news1", date: "01-01-2020" },
+  { title: "news2", date: "01-02-2020" },
+];
+
 app.get("/express_backend", function (req, res) {
-  res.send({ express: "YOUR BACKEND IS CONNECTED TO REACT" });
+  //res.send({ express: "YOUR BACKEND IS CONNECTED TO REACT" });
+  res.json(newsData);
 });
 
 //TODO

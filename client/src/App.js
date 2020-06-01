@@ -12,7 +12,8 @@ class App extends Component {
     //this.timer = setInterval(() => this.callBackendAPI(), 100);
     this.callBackendAPI()
       .then((res) => {
-        this.setState({ data: res.express });
+        this.setState({ data: res });
+        console.log(res);
         console.log("updated");
       })
       .catch((err) => console.log(err));
