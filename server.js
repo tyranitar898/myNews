@@ -13,15 +13,27 @@ app.listen(process.env.port || 4000, () => {
 let Data = { articles: [], fetchFrequency: 5000 };
 
 let counter = 0;
+function formatData(articleArr) {
+  for (article of articleArr) {
+    article.publishedAt = new Date(article.publishedAt);
+  }
+  return articleArr;
+}
+//3 event api http://www.mocky.io/v2/5ed6e3e532000078002743e9
+//1 event api http://www.mocky.io/v2/5ed6dc5832000035002743cc
 
 let timerID = setTimeout(function request() {
-  fetch("http://www.mocky.io/v2/5ed6c4e63200002900274378")
+  fetch("http://www.mocky.io/v2/5ed6e3e532000078002743e9")
     .then((res) => res.json()) //res.json returns a promise like fetch
     .then((json) => {
       counter += 1;
       console.log(counter);
-      Data.articles = Data.articles.concat(json.articles);
-      //console.log(newsData);
+
+      formattedArticles = formatData(json.articles);
+      Data.articles = Data.articles.concat(formattedArticles);
+      Data.articles.sort((b, a) => b.publishedAt - a.publishedAt);
+
+      //console.log(Data.articles);
     })
     .catch((err) => console.log(err));
   timerID = setTimeout(request, Data.fetchFrequency);
@@ -29,6 +41,8 @@ let timerID = setTimeout(function request() {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+//TODO: modularize routing
 
 app.get("/express_backend", function (req, res) {
   //res.send({ express: "YOUR BACKEND IS CONNECTED TO REACT" });
@@ -39,12 +53,18 @@ let freq = 0;
 app.post("/set-frequency", (req, res) => {
   freq = req.body.freq;
   console.log("recieved post");
+  //better check for proper freq
   if (freq !== 0 && freq < 10000) {
     Data.fetchFrequency = freq;
     res.redirect("/");
   } else {
     res.redirect("/error");
   }
+});
+
+app.post("/clearArticles", (req, res) => {
+  console.log("recied post form clear articles");
+  Data.articles = [];
 });
 
 /*
@@ -61,4 +81,5 @@ fetch("http://www.mocky.io/v2/5ed596d2340000740006d364")
     newsData = json;
   })
   .catch((err) => console.log(err));
+
 */

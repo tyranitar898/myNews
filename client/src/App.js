@@ -9,7 +9,7 @@ class App extends Component {
     super(props);
     this.state = { articles: [], clientFetchFreq: 5000 };
   }
-
+  //TODO: modularize fetch
   componentDidMount() {
     //fetch first time
     fetch("/express_backend")
@@ -55,17 +55,22 @@ class App extends Component {
 
     return (
       <div className="App">
-        <h1>My News App</h1>
-        <p>Current fetch frequency: {this.state.clientFetchFreq}</p>
-        <form method="POST" action="/set-frequency">
-          <input
-            type="text"
-            placeholder="Enter frequency for news update"
-            name="freq"
-            onChange={this.handleChange}
-          />
-          <button type="submit">ENTER</button>
-        </form>
+        <div id="AppHead">
+          <h1>My News App</h1>
+          <form method="POST" action="/clearArticles">
+            <button>Clear articles</button>
+          </form>
+          <p>Current fetch frequency: {this.state.clientFetchFreq}</p>
+          <form method="POST" action="/set-frequency">
+            <input
+              type="text"
+              placeholder="Enter frequency for news update"
+              name="freq"
+              onChange={this.handleChange}
+            />
+            <button type="submit">ENTER</button>
+          </form>
+        </div>
         {newsList}
       </div>
     );
