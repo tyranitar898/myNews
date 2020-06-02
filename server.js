@@ -15,7 +15,7 @@ let Data = { articles: [], fetchFrequency: 5000 };
 let counter = 0;
 
 let timerID = setTimeout(function request() {
-  fetch("http://www.mocky.io/v2/5ed5e5e0340000370006d4ad")
+  fetch("http://www.mocky.io/v2/5ed6c4e63200002900274378")
     .then((res) => res.json()) //res.json returns a promise like fetch
     .then((json) => {
       counter += 1;
