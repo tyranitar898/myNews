@@ -7,35 +7,28 @@ import fetch from "node-fetch";
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { articles: [] };
+    this.state = { articles: [], clientFetchFreq: 5000 };
   }
 
   componentDidMount() {
-    // Call our fetch function below once the component mounts
-    //this.timer = setInterval(() => this.callBackendAPI(), 100);
-    /*this.callBackendAPI()
-      .then((res) => {
-        this.setState({ articles: res.articles });
-        console.log(res.articles);
-      })
-      .catch((err) => console.log(err));*/
-    fetch("/express_backend")
-      .then((res) => res.json())
-      .then((articles) => {
-        //TODO: after we get the articles need to organize them by date.
-        this.setState({ articles: articles });
-        console.log(articles);
-      });
+    console.log("comp mount called");
+    this.timer = setInterval(() => {
+      fetch("/express_backend")
+        .then((res) => res.json())
+        .then((data) => {
+          //TODO: after we get the articles need to organize them by date.
+          this.setState({
+            articles: data.articles,
+            clientFetchFreq: data.fetchFrequency,
+          });
+          console.log(data);
+        })
+        .catch((err) => console.log(err));
+    }, this.state.clientFetchFreq);
   }
-  // Fetches our GET route from the Express server. (Note the route we are fetching matches the GET route from server.js
-  /*callBackendAPI = async () => {
-    const response = await fetch("/express_backend");
-    const body = await response.json();
-
-    if (response.status !== 200) {
-      throw Error(body.message);
-    }
-    return body;
+  /*
+  handleChange = (event) => {
+    this.setState({ clientFetchFreq: event.target.value });
   };*/
 
   render() {
@@ -52,15 +45,17 @@ class App extends Component {
     return (
       <div className="App">
         <h1>My News App</h1>
-        {newsList}
+        <p>Current fetch frequency: {this.state.clientFetchFreq}</p>
         <form method="POST" action="/set-frequency">
           <input
             type="text"
             placeholder="Enter frequency for news update"
             name="freq"
+            onChange={this.handleChange}
           />
           <button type="submit">ENTER</button>
         </form>
+        {newsList}
       </div>
     );
   }
