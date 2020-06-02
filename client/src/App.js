@@ -11,7 +11,20 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log("comp mount called");
+    //fetch first time
+    fetch("/express_backend")
+      .then((res) => res.json())
+      .then((data) => {
+        //TODO: after we get the articles need to organize them by date.
+        this.setState({
+          articles: data.articles,
+          clientFetchFreq: data.fetchFrequency,
+        });
+        console.log(data);
+      })
+      .catch((err) => console.log(err));
+
+    //timer fetch
     this.timer = setInterval(() => {
       fetch("/express_backend")
         .then((res) => res.json())

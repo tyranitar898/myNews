@@ -5,14 +5,12 @@ const bodyParser = require("body-parser");
 //set up express app
 const app = express();
 
-let fetchFreq = 5000;
-
 //listen for requests
 app.listen(process.env.port || 4000, () => {
   console.log("now lisenting on port 4000");
 });
 
-let Data = { articles: [], fetchFrequency: fetchFreq };
+let Data = { articles: [], fetchFrequency: 5000 };
 
 let counter = 0;
 
@@ -26,15 +24,14 @@ let timerID = setTimeout(function request() {
       //console.log(newsData);
     })
     .catch((err) => console.log(err));
-  timerID = setTimeout(request, fetchFreq);
-}, fetchFreq);
+  timerID = setTimeout(request, Data.fetchFrequency);
+}, Data.fetchFrequency);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/express_backend", function (req, res) {
   //res.send({ express: "YOUR BACKEND IS CONNECTED TO REACT" });
-
   res.json(Data);
 });
 
@@ -43,8 +40,7 @@ app.post("/set-frequency", (req, res) => {
   freq = req.body.freq;
   console.log("recieved post");
   if (freq !== 0 && freq < 10000) {
-    fetchFreq = freq;
-    console.log(fetchFreq);
+    Data.fetchFrequency = freq;
     res.redirect("/");
   } else {
     res.redirect("/error");
