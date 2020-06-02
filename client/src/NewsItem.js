@@ -7,6 +7,8 @@ function NewsItem(props) {
       <h2>{props.title}</h2>
       <h3>{props.publishedAt}</h3>
       <p>{props.description}</p>
+      <button>X</button>
+      <button>Star</button>
     </div>
   );
 }

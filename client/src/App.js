@@ -16,33 +16,31 @@ class App extends Component {
       .then((res) => res.json())
       .then((data) => {
         //TODO: after we get the articles need to organize them by date.
-        this.setState({
-          articles: data.articles,
-          clientFetchFreq: data.fetchFrequency,
-        });
-        console.log(data);
-      })
-      .catch((err) => console.log(err));
-
-    //timer fetch
-    this.timer = setInterval(() => {
-      fetch("/express_backend")
-        .then((res) => res.json())
-        .then((data) => {
-          //TODO: after we get the articles need to organize them by date.
-          this.setState({
+        this.setState(
+          {
             articles: data.articles,
             clientFetchFreq: data.fetchFrequency,
-          });
-          console.log(data);
-        })
-        .catch((err) => console.log(err));
-    }, this.state.clientFetchFreq);
+          },
+          () => {
+            //interval fetch
+            this.timer = setInterval(() => {
+              fetch("/express_backend")
+                .then((res) => res.json())
+                .then((data) => {
+                  //TODO: after we get the articles need to organize them by date.
+                  this.setState({
+                    articles: data.articles,
+                    clientFetchFreq: data.fetchFrequency,
+                  });
+                  console.log(data);
+                })
+                .catch((err) => console.log(err));
+            }, this.state.clientFetchFreq);
+          }
+        );
+      })
+      .catch((err) => console.log(err));
   }
-  /*
-  handleChange = (event) => {
-    this.setState({ clientFetchFreq: event.target.value });
-  };*/
 
   render() {
     const newsList = this.state.articles.map((article, index) => (
@@ -73,5 +71,10 @@ class App extends Component {
     );
   }
 }
+
+/*
+  handleChange = (event) => {
+    this.setState({ clientFetchFreq: event.target.value });
+  };*/
 
 export default App;
