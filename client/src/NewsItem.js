@@ -5,7 +5,7 @@ function NewsItem(props) {
   return (
     <div className="NewsItem">
       <p className="NewsItem-sideHeader">{props.publishedAt}</p>
-      <h2>{props.title}</h2>
+      <h2 className="NewsItem-title">{props.title}</h2>
       <p>{props.description}</p>
       <button>X</button>
       <button>Star</button>

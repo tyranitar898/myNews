@@ -44,8 +44,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //TODO: modularize routing
 
+// Serve any static files
+app.use(express.static(path.join(__dirname, "client/build")));
+// Handle React routing, return all requests to React app
+app.get("/", function (req, res) {
+  res.sendFile(path.join(__dirname, "client/build", "index.html"));
+});
+
 app.get("/express_backend", function (req, res) {
   //res.send({ express: "YOUR BACKEND IS CONNECTED TO REACT" });
+  //res.sendFile(path.join(__dirname, "client/build", "index.html"));
   res.json(Data);
 });
 
@@ -73,13 +81,3 @@ fetch(
     "country=us&" +
     "apiKey=3106bc28b3154bc9b2eafdfc1d4a935c"
 );*/
-/*
-fetch("http://www.mocky.io/v2/5ed596d2340000740006d364")
-  .then((res) => res.json()) //res.json returns a promise like fetch
-  .then((json) => {
-    //console.log(json);
-    newsData = json;
-  })
-  .catch((err) => console.log(err));
-
-*/

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
+
 import NewsItem from "./NewsItem";
 import "./App.css";
 import fetch from "node-fetch";

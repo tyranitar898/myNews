@@ -25,3 +25,8 @@ div.NewsItem:hover {
   padding: 2%;
   width: fit-content;
 }
+
+.NewsItem-title {
+  margin-left: 0%;
+  text-align: left;
+}
