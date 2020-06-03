@@ -7,7 +7,7 @@ import fetch from "node-fetch";
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { articles: [], clientFetchFreq: 5000 };
+    this.state = { articles: [], clientFetchFreq: 0 };
   }
 
   callBackendApi = async () => {
@@ -47,8 +47,46 @@ class App extends Component {
       .catch((err) => {
         console.log(err);
       });
+  }
 
-    /*
+  render() {
+    const newsList = this.state.articles.map((article, index) => (
+      // Key should be specified inside the array due to how ract manages and identifies components
+      <NewsItem
+        key={article.title + index}
+        title={article.title}
+        description={article.description}
+        publishedAt={article.publishedAt}
+      />
+    ));
+    // change freq submit to select
+    return (
+      <div className="App">
+        <div id="AppHead">
+          <h1>My News App</h1>
+          <form method="POST" action="/clearArticles">
+            <button>Clear articles</button>
+          </form>
+          <p>Current fetch frequency: {this.state.clientFetchFreq}</p>
+          <form method="POST" action="/set-frequency">
+            <input
+              type="text"
+              placeholder="Enter frequency for news update"
+              name="freq"
+              onChange={this.handleChange}
+            />
+            <button type="submit">ENTER</button>
+          </form>
+        </div>
+        {newsList}
+      </div>
+    );
+  }
+}
+
+export default App;
+
+/*
     fetch("/express_backend")
       .then((res) => res.json())
       .then((data) => {
@@ -77,41 +115,3 @@ class App extends Component {
         );
       })
       .catch((err) => console.log(err));*/
-  }
-
-  render() {
-    const newsList = this.state.articles.map((article, index) => (
-      // Key should be specified inside the array.
-      <NewsItem
-        key={article.title + index}
-        title={article.title}
-        description={article.description}
-        publishedAt={article.publishedAt}
-      />
-    ));
-
-    return (
-      <div className="App">
-        <div id="AppHead">
-          <h1>My News App</h1>
-          <form method="POST" action="/clearArticles">
-            <button>Clear articles</button>
-          </form>
-          <p>Current fetch frequency: {this.state.clientFetchFreq}</p>
-          <form method="POST" action="/set-frequency">
-            <input
-              type="text"
-              placeholder="Enter frequency for news update"
-              name="freq"
-              onChange={this.handleChange}
-            />
-            <button type="submit">ENTER</button>
-          </form>
-        </div>
-        {newsList}
-      </div>
-    );
-  }
-}
-
-export default App;
