@@ -70,13 +70,6 @@ app.post("/clearArticles", (req, res) => {
   res.redirect("/");
 });
 
-/*
-fetch(
-  "http://newsapi.org/v2/top-headlines?" +
-    "country=us&" +
-    "apiKey=3106bc28b3154bc9b2eafdfc1d4a935c"
-);*/
-
 //listen for requests
 app.listen(process.env.PORT || 4000, () => {
   console.log("now lisenting on port 4000");
