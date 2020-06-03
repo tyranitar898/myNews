@@ -5,11 +5,6 @@ const bodyParser = require("body-parser");
 //set up express app
 const app = express();
 
-//listen for requests
-app.listen(process.env.port || 4000, () => {
-  console.log("now lisenting on port 4000");
-});
-
 let Data = { articles: [], fetchFrequency: 5000 };
 
 let counter = 0;
@@ -81,3 +76,8 @@ fetch(
     "country=us&" +
     "apiKey=3106bc28b3154bc9b2eafdfc1d4a935c"
 );*/
+
+//listen for requests
+app.listen(process.env.port || 4000, () => {
+  console.log("now lisenting on port 4000");
+});
