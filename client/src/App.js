@@ -9,9 +9,46 @@ class App extends Component {
     super(props);
     this.state = { articles: [], clientFetchFreq: 5000 };
   }
-  //TODO: modularize fetch
+
+  callBackendApi = async () => {
+    let data;
+    try {
+      let res = await fetch("/express_backend");
+      data = await res.json();
+    } catch (err) {
+      console.log(err);
+    }
+    return data;
+  };
+
   componentDidMount() {
-    //fetch first time
+    //Fetch on mount
+    this.callBackendApi()
+      .then((data) => {
+        this.setState(
+          {
+            articles: data.articles,
+            clientFetchFreq: data.fetchFrequency,
+          },
+          () => {
+            //Interval fetch (happens on the callback of the first fetch)
+            this.timer = setInterval(() => {
+              this.callBackendApi().then((data) => {
+                this.setState({
+                  articles: data.articles,
+                  clientFetchFreq: data.fetchFrequency,
+                });
+                console.log(data);
+              });
+            }, this.state.clientFetchFreq);
+          }
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    /*
     fetch("/express_backend")
       .then((res) => res.json())
       .then((data) => {
@@ -39,7 +76,7 @@ class App extends Component {
           }
         );
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err));*/
   }
 
   render() {
@@ -76,10 +113,5 @@ class App extends Component {
     );
   }
 }
-
-/*
-  handleChange = (event) => {
-    this.setState({ clientFetchFreq: event.target.value });
-  };*/
 
 export default App;
