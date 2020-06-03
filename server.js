@@ -46,14 +46,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serve any static files
 app.use(express.static(path.join(__dirname, "client/build")));
-// Handle React routing, return all requests to React app
-app.get("/", function (req, res) {
-  res.sendFile(path.join(__dirname, "client/build", "index.html"));
-});
 
 app.get("/express_backend", function (req, res) {
-  //res.send({ express: "YOUR BACKEND IS CONNECTED TO REACT" });
-  //res.sendFile(path.join(__dirname, "client/build", "index.html"));
   res.json(Data);
 });
 
@@ -67,12 +61,14 @@ app.post("/set-frequency", (req, res) => {
     res.redirect("/");
   } else {
     res.redirect("/error");
+    //create error page
   }
 });
 
 app.post("/clearArticles", (req, res) => {
   console.log("recied post form clear articles");
   Data.articles = [];
+  res.redirect("/");
 });
 
 /*

@@ -22,7 +22,7 @@ class App extends Component {
             clientFetchFreq: data.fetchFrequency,
           },
           () => {
-            //interval fetch
+            //interval fetch .. shoud i be using await
             this.timer = setInterval(() => {
               fetch("/express_backend")
                 .then((res) => res.json())
