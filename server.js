@@ -34,8 +34,8 @@ let timerID = setTimeout(function request() {
   timerID = setTimeout(request, Data.fetchFrequency);
 }, Data.fetchFrequency);
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 //TODO: modularize routing
 
@@ -78,6 +78,6 @@ fetch(
 );*/
 
 //listen for requests
-app.listen(process.env.port || 4000, () => {
+app.listen(process.env.PORT || 4000, () => {
   console.log("now lisenting on port 4000");
 });
