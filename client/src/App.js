@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import NewsItem from "./components/NewsItem";
-import FavouriteNewsItem from "./components/FavouriteNewsItem";
-import FetchFreqSelect from "./components/FetchFreqSelect";
+import NewsItem from "./NewsItem";
+import FavouriteNewsItem from "./FavouriteNewsItem";
+import FetchFreqSelect from "./FetchFreqSelect";
 import "./App.css";
 import fetch from "node-fetch";
 
