@@ -84,11 +84,11 @@ class App extends Component {
             <button>Clear articles</button>
           </form>
           <p>My favourite articles:</p>
-          <ol>
+          <ul>
             {this.state.faveArticles.map((index) => (
-              <li key={index}>{index}</li>
+              <li key={index}>Article #{index}</li>
             ))}
-          </ol>
+          </ul>
           <p>
             Current fetch frequency:&nbsp;
             {parseMsToTimeString(this.state.clientFetchFreq)}
