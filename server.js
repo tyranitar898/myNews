@@ -5,8 +5,9 @@ const fetch = require("node-fetch");
 const app = express();
 
 let Data = { articles: [], fetchFrequency: "5000" };
-let freq = 0;
+//counter to keep track of timer updates
 let counter = 0;
+//timeHandler returned by the servers timeout() calls
 let timeHandle = null;
 
 startFetchTimer();
@@ -28,6 +29,7 @@ app.get("/express_backend", function (req, res) {
 });
 //Route for post request to update pull frequency
 app.post("/set-frequency", (req, res) => {
+  let freq = 0;
   freq = req.body.freq;
   //Simple check to see that user inputed a number
   if (freq !== 0) {
@@ -50,6 +52,7 @@ app.post("/clearArticles", (req, res) => {
 app.listen(process.env.PORT || 4000, () => {
   console.log("now lisenting on port 4000");
 });
+//with id http://www.mocky.io/v2/5ed92b8d31000090b6c4ebd1
 
 //3 event api http://www.mocky.io/v2/5ed6e3e532000078002743e9
 //1 event http://www.mocky.io/v2/5ed88e803100001000c4e528
@@ -63,7 +66,7 @@ function startFetchTimer() {
     clearTimeout(timeHandle);
   }
   timeHandle = setTimeout(function request() {
-    fetch("http://www.mocky.io/v2/5ed6e3e532000078002743e9")
+    fetch("http://www.mocky.io/v2/5ed9288331000053b2c4eba1")
       .then((res) => res.json()) //res.json returns a promise like fetch()
       .then((json) => {
         counter += 1;

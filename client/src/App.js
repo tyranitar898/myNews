@@ -27,23 +27,20 @@ class App extends Component {
     return data;
   };
 
-  addFaveArticle = (index) => {
+  addFaveArticle = (id) => {
     let temp = this.state.faveArticles;
-    if (temp.indexOf(index) === -1) {
-      temp.push(index);
+    if (temp.indexOf(id) === -1) {
+      temp.push(id);
       this.setState({ faveArticles: temp });
     }
   };
 
-  removeArticle = (index) => {
+  removeArticle = (id) => {
     let articleCopy = this.state.articles;
-    console.log(index);
     for (var i = 0; i < articleCopy.length; i++) {
-      console.log(articleCopy[i].id);
-      if (articleCopy[i].id === index) {
+      if (articleCopy[i].id === id) {
         articleCopy.splice(i, 1);
         this.setState({ articles: articleCopy });
-        console.log(articleCopy);
         return;
       }
     }
@@ -83,7 +80,8 @@ class App extends Component {
       // Key should be specified inside the array due
       //to how ract manages and identifies components
       <NewsItem
-        index={article.id}
+        id={article.id}
+        index={index}
         key={article.title + index}
         title={article.title}
         description={article.description}
@@ -101,11 +99,14 @@ class App extends Component {
       <div className="App">
         <div id="AppHead">
           <h1>My News App</h1>
+          <p># of articles: {this.state.articles.length}</p>
           <form method="POST" action="/clearArticles">
             <button>Clear articles</button>
           </form>
-          <p>My favourite articles:</p>
-          <ul>{favouritesList}</ul>
+          <div id="sidePanel">
+            <p>My favourite articles:</p>
+            <ul>{favouritesList}</ul>
+          </div>
           <p>
             Current fetch frequency:&nbsp;
             {parseMsToTimeString(this.state.clientFetchFreq)}

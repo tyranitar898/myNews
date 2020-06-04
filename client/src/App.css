@@ -26,5 +26,9 @@ div.NewsItem:hover {
   width: fit-content;
 }
 
-.NewsItem-title {
+#sidePanel {
+  position: fixed;
+  top: 0;
+  left: 90%;
+  font-size: 16px;
 }
