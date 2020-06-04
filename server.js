@@ -1,69 +1,45 @@
 const express = require("express");
 const path = require("path");
 const fetch = require("node-fetch");
-const bodyParser = require("body-parser");
-//set up express app
+
 const app = express();
 
-let Data = { articles: [], fetchFrequency: 5000 };
+let Data = { articles: [], fetchFrequency: "5000" };
 let freq = 0;
 let counter = 0;
+let timeHandle = null;
 
-function formatData(articleArr) {
-  for (article of articleArr) {
-    article.publishedAt = new Date(article.publishedAt);
-  }
-  return articleArr;
-}
-//3 event api http://www.mocky.io/v2/5ed6e3e532000078002743e9
-//1 event
+startFetchTimer();
 
-let timerID = setTimeout(function request() {
-  fetch("http://www.mocky.io/v2/5ed6e3e532000078002743e9")
-    .then((res) => res.json()) //res.json returns a promise like fetch
-    .then((json) => {
-      counter += 1;
-      console.log(counter);
-
-      formattedArticles = formatData(json.articles);
-      Data.articles = Data.articles.concat(formattedArticles);
-      Data.articles.sort((b, a) => b.publishedAt - a.publishedAt);
-
-      //console.log(Data.articles);
-    })
-    .catch((err) => console.log(err));
-  timerID = setTimeout(request, Data.fetchFrequency);
-}, Data.fetchFrequency);
-
+//middleware for parsing forms and storing result as json obj
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//TODO: modularize routing
-
-// Serve any static files
+/* <----- ROUTES ----- >*/
+//Serve any static files
 app.use(express.static(path.join(__dirname, "client/build")));
-//route home page to index.html
+//Route home page to index.html
 app.get("/", (request, response) => {
   response.sendFile(path.join(__dirname, "client/build", "index.html"));
 });
-//routing for accessing backend
+//Route accessing backend
 app.get("/express_backend", function (req, res) {
   res.json(Data);
 });
-
+//Route for post request to update pull frequency
 app.post("/set-frequency", (req, res) => {
   freq = req.body.freq;
-  console.log("recieved post");
-  //better check for proper freq
-  if (freq !== 0 && freq < 10000) {
+  //Simple check to see that user inputed a number
+  if (freq !== 0) {
     Data.fetchFrequency = freq;
+    console.log(Data.fetchFrequency);
+    startFetchTimer();
     res.redirect("/");
   } else {
     res.redirect("/error");
-    //create error page
   }
 });
-
+//Route for clearing the articles in the data base
 app.post("/clearArticles", (req, res) => {
   console.log("recied post form clear articles");
   Data.articles = [];
@@ -74,6 +50,43 @@ app.post("/clearArticles", (req, res) => {
 app.listen(process.env.PORT || 4000, () => {
   console.log("now lisenting on port 4000");
 });
+
+//3 event api http://www.mocky.io/v2/5ed6e3e532000078002743e9
+//1 event http://www.mocky.io/v2/5ed88e803100001000c4e528
+
+/* startFetchTimer 
+  1. checks if there's an exisiting timeoutHandle and terminates existing one
+  2. creates a new timeout interval based on the newly user inputed fetch rate.
+ */
+function startFetchTimer() {
+  if (timeHandle !== null) {
+    clearTimeout(timeHandle);
+  }
+  timeHandle = setTimeout(function request() {
+    fetch("http://www.mocky.io/v2/5ed6e3e532000078002743e9")
+      .then((res) => res.json()) //res.json returns a promise like fetch()
+      .then((json) => {
+        counter += 1;
+        console.log(counter);
+
+        //Format the recieved data -> add it to the exisiting articles -> sort it by date
+        formattedArticles = formatData(json.articles);
+        Data.articles = Data.articles.concat(formattedArticles);
+        Data.articles.sort((b, a) => b.publishedAt - a.publishedAt);
+      })
+      .catch((err) => console.log(err));
+    timeHandle = setTimeout(request, Data.fetchFrequency);
+  }, Data.fetchFrequency);
+}
+//Formats the article array to use Date objects instead of strings for sorting.
+function formatData(articleArr) {
+  for (article of articleArr) {
+    article.publishedAt = new Date(article.publishedAt);
+  }
+  return articleArr;
+}
+
+//API json object
 
 /*
 {

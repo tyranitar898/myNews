@@ -1,13 +1,18 @@
 import React, { Component } from "react";
-
 import NewsItem from "./NewsItem";
+//import favArticle from "./favArticle";
 import "./App.css";
 import fetch from "node-fetch";
+
+let FIVEMS = 5000;
+let ONEMS = 1000;
+let ONEDAY = 1000 * 60 * 60 * 24;
+let ONEHOUR = 1000 * 60 * 60;
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { articles: [], clientFetchFreq: 0 };
+    this.state = { articles: [], clientFetchFreq: "5000", faveArticles: [] };
   }
 
   callBackendApi = async () => {
@@ -21,10 +26,19 @@ class App extends Component {
     return data;
   };
 
+  addFaveArticle = (index) => {
+    let temp = this.state.faveArticles;
+    if (temp.indexOf(index) === -1) {
+      temp.push(index);
+      this.setState({ faveArticles: temp });
+    }
+  };
+
   componentDidMount() {
     //Fetch on mount
     this.callBackendApi()
       .then((data) => {
+        console.log(data);
         this.setState(
           {
             articles: data.articles,
@@ -53,13 +67,15 @@ class App extends Component {
     const newsList = this.state.articles.map((article, index) => (
       // Key should be specified inside the array due to how ract manages and identifies components
       <NewsItem
+        index={index}
         key={article.title + index}
         title={article.title}
         description={article.description}
         publishedAt={article.publishedAt}
+        addFavorite={this.addFaveArticle}
       />
     ));
-    // change freq submit to select
+
     return (
       <div className="App">
         <div id="AppHead">
@@ -67,14 +83,31 @@ class App extends Component {
           <form method="POST" action="/clearArticles">
             <button>Clear articles</button>
           </form>
-          <p>Current fetch frequency: {this.state.clientFetchFreq}</p>
+          <p>My favourite articles:</p>
+          <ol>
+            {this.state.faveArticles.map((index) => (
+              <li key={index}>{index}</li>
+            ))}
+          </ol>
+          <p>
+            Current fetch frequency:&nbsp;
+            {parseMsToTimeString(this.state.clientFetchFreq)}
+          </p>
           <form method="POST" action="/set-frequency">
-            <input
-              type="text"
-              placeholder="Enter frequency for news update"
-              name="freq"
-              onChange={this.handleChange}
-            />
+            <select name="freq">
+              <option name="freq" value={FIVEMS}>
+                5 ms
+              </option>
+              <option name="freq" value={ONEMS}>
+                1 ms
+              </option>
+              <option name="freq" value={ONEHOUR}>
+                1 hr
+              </option>
+              <option name="freq" value={ONEDAY}>
+                1 day
+              </option>
+            </select>
             <button type="submit">ENTER</button>
           </form>
         </div>
@@ -84,7 +117,31 @@ class App extends Component {
   }
 }
 
+function parseMsToTimeString(ms) {
+  if (ms === "5000") {
+    return "5 ms";
+  } else if (ms === "1000") {
+    return "1 ms";
+  } else if (ms === "3600000") {
+    return "1 Hour";
+  } else if (ms === "86400000") {
+    return "1 Day";
+  }
+}
+
 export default App;
+
+/*
+<form method="POST" action="/set-frequency">
+            <input
+              type="text"
+              placeholder="Enter frequency for news update"
+              name="freq"
+              onChange={this.handleChange}
+            />
+            <button type="submit">ENTER</button>
+          </form>
+*/
 
 /*
     fetch("/express_backend")
