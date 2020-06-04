@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import NewsItem from "./NewsItem";
-//import favArticle from "./favArticle";
+import NewsItem from "./components/NewsItem";
+import FavouriteNewsItem from "./components/FavouriteNewsItem";
+import FetchFreqSelect from "./components/fetchFreqSelect";
 import "./App.css";
 import fetch from "node-fetch";
 
@@ -31,6 +32,20 @@ class App extends Component {
     if (temp.indexOf(index) === -1) {
       temp.push(index);
       this.setState({ faveArticles: temp });
+    }
+  };
+
+  removeArticle = (index) => {
+    let articleCopy = this.state.articles;
+    console.log(index);
+    for (var i = 0; i < articleCopy.length; i++) {
+      console.log(articleCopy[i].id);
+      if (articleCopy[i].id === index) {
+        articleCopy.splice(i, 1);
+        this.setState({ articles: articleCopy });
+        console.log(articleCopy);
+        return;
+      }
     }
   };
 
@@ -65,15 +80,21 @@ class App extends Component {
 
   render() {
     const newsList = this.state.articles.map((article, index) => (
-      // Key should be specified inside the array due to how ract manages and identifies components
+      // Key should be specified inside the array due
+      //to how ract manages and identifies components
       <NewsItem
-        index={index}
+        index={article.id}
         key={article.title + index}
         title={article.title}
         description={article.description}
         publishedAt={article.publishedAt}
         addFavorite={this.addFaveArticle}
+        removeArticle={this.removeArticle}
       />
+    ));
+
+    const favouritesList = this.state.faveArticles.map((articleID, index) => (
+      <FavouriteNewsItem value={articleID} key={index} />
     ));
 
     return (
@@ -84,32 +105,12 @@ class App extends Component {
             <button>Clear articles</button>
           </form>
           <p>My favourite articles:</p>
-          <ul>
-            {this.state.faveArticles.map((index) => (
-              <li key={index}>Article #{index}</li>
-            ))}
-          </ul>
+          <ul>{favouritesList}</ul>
           <p>
             Current fetch frequency:&nbsp;
             {parseMsToTimeString(this.state.clientFetchFreq)}
           </p>
-          <form method="POST" action="/set-frequency">
-            <select name="freq">
-              <option name="freq" value={FIVEMS}>
-                5 ms
-              </option>
-              <option name="freq" value={ONEMS}>
-                1 ms
-              </option>
-              <option name="freq" value={ONEHOUR}>
-                1 hr
-              </option>
-              <option name="freq" value={ONEDAY}>
-                1 day
-              </option>
-            </select>
-            <button type="submit">ENTER</button>
-          </form>
+          <FetchFreqSelect />
         </div>
         {newsList}
       </div>
@@ -130,45 +131,3 @@ function parseMsToTimeString(ms) {
 }
 
 export default App;
-
-/*
-<form method="POST" action="/set-frequency">
-            <input
-              type="text"
-              placeholder="Enter frequency for news update"
-              name="freq"
-              onChange={this.handleChange}
-            />
-            <button type="submit">ENTER</button>
-          </form>
-*/
-
-/*
-    fetch("/express_backend")
-      .then((res) => res.json())
-      .then((data) => {
-        //TODO: after we get the articles need to organize them by date.
-        this.setState(
-          {
-            articles: data.articles,
-            clientFetchFreq: data.fetchFrequency,
-          },
-          () => {
-            //interval fetch .. shoud i be using await
-            this.timer = setInterval(() => {
-              fetch("/express_backend")
-                .then((res) => res.json())
-                .then((data) => {
-                  //TODO: after we get the articles need to organize them by date.
-                  this.setState({
-                    articles: data.articles,
-                    clientFetchFreq: data.fetchFrequency,
-                  });
-                  console.log(data);
-                })
-                .catch((err) => console.log(err));
-            }, this.state.clientFetchFreq);
-          }
-        );
-      })
-      .catch((err) => console.log(err));*/

@@ -7,7 +7,13 @@ function NewsItem(props) {
       </p>
       <h2 className="NewsItem-title">{props.title}</h2>
       <p>{props.description}</p>
-      <button>X</button>
+      <button
+        onClick={() => {
+          props.removeArticle(props.index);
+        }}
+      >
+        X
+      </button>
       <button
         onClick={() => {
           props.addFavorite(props.index);
