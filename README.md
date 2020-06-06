@@ -1,4 +1,4 @@
-# myNews https://ryanchang-mynews.herokuapp.com/
+# [myNews](https://ryanchang-mynews.herokuapp.com/)
 
 myNews is a web app made using Express in Node.js to pull data at a inputed refresh rate from a [mock API](http://www.mocky.io/v2/5ed92b8d31000090b6c4ebd1) and serve it to a React based front end.
 
