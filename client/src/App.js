@@ -5,11 +5,6 @@ import FetchFreqSelect from "./FetchFreqSelect";
 import "./App.css";
 import fetch from "node-fetch";
 
-let FIVEMS = 5000;
-let ONEMS = 1000;
-let ONEDAY = 1000 * 60 * 60 * 24;
-let ONEHOUR = 1000 * 60 * 60;
-
 class App extends Component {
   constructor(props) {
     super(props);
