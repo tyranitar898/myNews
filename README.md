@@ -27,3 +27,7 @@ npm run test
 ```
 
 Now you can visit it at http://localhost:4000/
+
+## Authors
+
+- **Ryan Chang** - _Developer_ - [Personal Website](https://tyranitar898.github.io/UofT/)
