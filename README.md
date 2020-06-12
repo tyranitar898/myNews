@@ -14,7 +14,7 @@ Clone proj
 git clone https://github.com/tyranitar898/myNews.git
 ```
 
-CD into project directory and install dependencies
+cd into project directory and install dependencies
 
 ```
 npm install
