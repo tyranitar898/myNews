@@ -28,8 +28,10 @@ npm run test
 
 Now you can visit it at http://localhost:4000/
 
-* [Express](https://expressjs.com/) - The back end Web Framework
-* [React](https://reactjs.org/) - for front end 
+## Built With
+
+* [Express](https://expressjs.com/) - Web framework for Node.js, to power its web server.
+* [React](https://reactjs.org/) - for frontend.
 
 ## Authors
 
