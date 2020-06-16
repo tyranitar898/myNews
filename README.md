@@ -7,7 +7,7 @@ myNews is a web app made using Express in Node.js to pull data at a inputed refr
     <img src="images/0.png" alt="" width="45%"/>
 </div>
 
-### Features
+## Features
 
 - Adjustable refresh reate (5 ms, 1 ms, 1 Day, 1 Hour)
 - Favourite, dissmiss or clear news articles
