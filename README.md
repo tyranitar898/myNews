@@ -2,6 +2,11 @@
 
 myNews is a web app made using Express in Node.js to pull data at a inputed refresh rate from a [mock API](http://www.mocky.io/v2/5ed92b8d31000090b6c4ebd1) and serve it to a React based front end.
 
+<div align="center">
+    <img src="images/1.png" alt="" width="45%"/>
+    <img src="images/0.png" alt="" width="45%"/>
+</div>
+
 ## Getting Started
 
 These instructions will get you a copy of the proejct up and running on your local machine for development and testing purposes.
